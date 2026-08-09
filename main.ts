@@ -1,4 +1,4 @@
-//% color=#F2B705 icon="\uf001" block="ギターコード"
+//% color=#F20005 icon="\uf001" block="ギターコード"
 //% groups=['スイッチ割り当て', '和音', '個別出力']
 namespace guitarchord {
     /**
