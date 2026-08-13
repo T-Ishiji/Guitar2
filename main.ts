@@ -1,4 +1,4 @@
-//% color=#F20005 icon="\uf001" block="ギターコード"
+//% color=#F2B705 icon="\uf001" block="ギターコード"
 //% groups=['スイッチ割り当て', '和音', '個別出力']
 namespace guitarchord {
     /**
@@ -109,9 +109,22 @@ namespace guitarchord {
     let assignedChords: Chord[] = []
     let watcherStarted = false
     let playingAssignment = -1
+    let chordDelayMs = 0
+
+    /**
+     * 和音を鳴らすときの各音の時間差を設定します。
+     * 0 = 3音同時、正 = 1→2→3、負 = 3→1→2 の順に鳴らします。
+     * 例: C(ド・ミ・ソ)で -120 ms の場合は ソ→ド→ミ。
+     */
+    //% blockId=guitarchord_v27_set_delay block="ディレイを %delay ms に設定する"
+    //% group="和音" weight=95
+    //% delay.defl=0 delay.min=-1000 delay.max=1000
+    export function setDelay(delay: number): void {
+        chordDelayMs = Math.round(delay)
+    }
 
     /** P8 / P14 / P16 の3出力で和音を鳴らします。 */
-    //% blockId=guitarchord_v26_play_chord block="和音 %chord を鳴らす"
+    //% blockId=guitarchord_v27_play_chord block="和音 %chord を鳴らす"
     //% group="和音" weight=90
     //% chord.defl=Chord.C
     export function playChord(chord: Chord): void {
@@ -176,7 +189,7 @@ namespace guitarchord {
      * ボタン1=P1、ボタン2=P2、ボタン3=P9 として、
      * GNDとの間につないだスイッチを押している間だけ選んだ和音を鳴らします。
      */
-    //% blockId=guitarchord_v26_assign_chord block="%button に和音 %chord を割り当てる"
+    //% blockId=guitarchord_v27_assign_chord block="%button に和音 %chord を割り当てる"
     //% group="スイッチ割り当て" weight=100
     //% button.defl=ChordButton.Button1
     //% chord.defl=Chord.C
@@ -239,11 +252,40 @@ namespace guitarchord {
         return DigitalPin.P1
     }
 
-    /** 3つの周波数を同時に鳴らします。 */
+    /**
+     * 3つの周波数を設定されたディレイで鳴らします。
+     * 0: 同時
+     * 正: 出力1 → 出力2 → 出力3
+     * 負: 出力3 → 出力1 → 出力2
+     */
     function play3(f1: number, f2: number, f3: number): void {
-        tone1(f1)
-        tone2(f2)
-        tone3(f3)
+        if (chordDelayMs == 0) {
+            tone1(f1)
+            tone2(f2)
+            tone3(f3)
+            return
+        }
+
+        // 新しいストラムを始める前に、前の和音をいったん止めます。
+        stopAll()
+
+        let waitMs = chordDelayMs
+        if (waitMs < 0) waitMs = -waitMs
+
+        if (chordDelayMs > 0) {
+            tone1(f1)
+            basic.pause(waitMs)
+            tone2(f2)
+            basic.pause(waitMs)
+            tone3(f3)
+        } else {
+            // 例: C(ド・ミ・ソ) → ソ・ド・ミ
+            tone3(f3)
+            basic.pause(waitMs)
+            tone1(f1)
+            basic.pause(waitMs)
+            tone2(f2)
+        }
     }
 
     //% block="出力1 P8 を %frequency Hz"

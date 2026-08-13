@@ -1,33 +1,31 @@
-# ギターコード v0.0.22
+# ギターコード v0.0.27
 
-# Guitar Chord v0.0.19
+BBC micro:bit V2 用の3音和音拡張です。
 
-BBC micro:bit V2 専用 MakeCode 拡張機能です。
-
-- カテゴリ表示名: Guitar Chord
-- カテゴリ色: #F2B705
-- カテゴリアイコン: Font Awesome volume-up (\uf028)
+## ボタン
 - ボタン1 = P1
 - ボタン2 = P2
 - ボタン3 = P9
-- 音声出力 = P8 / P14 / P16
-- サムネイル画像 icon.png は含めていません。
 
-内部 namespace は互換性のため `multitone` のままです。
+## 音声出力
+- 出力1 = P8
+- 出力2 = P14
+- 出力3 = P16
 
+## ディレイ
+「ディレイを ○ ms に設定する」ブロックでストラム間隔を設定できます。
 
-## v0.0.22
-TypeScript/C++/shim の namespace を `guitarchord` に統一。カテゴリ名は「ギターコード」。サムネイルなし。
+- 0 ms: 3音同時
+- 正の値: 出力1 → 出力2 → 出力3
+- 負の値: 出力3 → 出力1 → 出力2
 
+C（ド・ミ・ソ）なら、+120 ms は ド→ミ→ソ、-120 ms は ソ→ド→ミ です。
+各音は追加されていき、最終的には3音が重なって、ボタンを離すまで鳴ります。
 
-## v0.0.24
-- カテゴリアイコンをスピーカー (`\uf028`) に変更
-- 主要ブロックIDを v24 用の新しいIDに変更
-
-
-## v0.0.25
-カテゴリのアイコンを音符 (`\uf001`) に変更しました。ブロックIDはv0.0.24の新IDを維持しています。
-
-
-## v0.0.26
-ブロックIDを v26 用の新しいIDへ変更しました。カテゴリは「ギターコード」、色は黄色、アイコンは音符 (`\uf001`) のままです。
+## 例
+```typescript
+guitarchord.setDelay(120)
+guitarchord.assignChord(guitarchord.ChordButton.Button1, guitarchord.Chord.C)
+guitarchord.assignChord(guitarchord.ChordButton.Button2, guitarchord.Chord.G)
+guitarchord.assignChord(guitarchord.ChordButton.Button3, guitarchord.Chord.Am)
+```
