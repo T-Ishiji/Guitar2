@@ -1,7 +1,7 @@
 {
-    "name": "guitar-chord-v27-delay",
-    "version": "0.0.27",
-    "description": "Guitar chord extension for BBC micro:bit V2 with adjustable strum delay. 0=simultaneous, positive=1-2-3, negative=3-1-2. Button1=P1, Button2=P2, Button3=P9; outputs P8/P14/P16.",
+    "name": "guitar-chord-v28-delay-safe",
+    "version": "0.0.28",
+    "description": "Guitar chord extension for BBC micro:bit V2. Safe delay addition based on v26; 0=simultaneous, positive=1-2-3, negative=3-1-2.",
     "dependencies": {
         "core": "*"
     },
