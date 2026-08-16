@@ -11,6 +11,9 @@ namespace guitarchord {
     static uint16_t seq1[1];
     static uint16_t seq2[1];
 
+    // パルス幅を 1/16 単位で保持します。初期値 8/16 = 50% (square)。
+    static uint8_t pulseWidth16 = 8;
+
     static void startPwm(
         NRF_PWM_Type *pwm,
         NRF_GPIO_Type *gpio,
@@ -60,7 +63,12 @@ namespace guitarchord {
             (PWM_DECODER_LOAD_Common << PWM_DECODER_LOAD_Pos) |
             (PWM_DECODER_MODE_RefreshCount << PWM_DECODER_MODE_Pos);
 
-        seq[0] = (uint16_t)(top / 2);
+        uint32_t compare = (top * (uint32_t)pulseWidth16 + 8UL) / 16UL;
+        if (compare < 1)
+            compare = 1;
+        if (compare >= top)
+            compare = top - 1;
+        seq[0] = (uint16_t)compare;
 
         pwm->SEQ[0].PTR = (uint32_t)seq;
         pwm->SEQ[0].CNT = 1;
@@ -87,6 +95,20 @@ namespace guitarchord {
         gpio->OUTCLR = (1UL << pin);
     }
 #endif
+
+    //%
+    void setTimbre(int timbre) {
+#if MICROBIT_CODAL
+        switch (timbre) {
+            case 0: pulseWidth16 = 8; break; // Square 50%
+            case 1: pulseWidth16 = 6; break; // Pulse 37.5%
+            case 2: pulseWidth16 = 4; break; // Pulse 25%
+            case 3: pulseWidth16 = 2; break; // Pulse 12.5%
+            case 4: pulseWidth16 = 1; break; // Pulse 6.25%
+            default: pulseWidth16 = 8; break;
+        }
+#endif
+    }
 
     //%
     void tone1(int frequency) {
