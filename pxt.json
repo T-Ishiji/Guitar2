@@ -1,6 +1,6 @@
 {
     "name": "guitar-chord-v30-timbre",
-    "version": "0.0.30",
+    "version": "0.0.31",
     "description": "Guitar chord extension for BBC micro:bit V2 with preset chords, custom 3-frequency chords, strum delay, and five PWM timbres.",
     "dependencies": {
         "core": "*"

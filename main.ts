@@ -232,7 +232,8 @@ namespace guitarchord {
      * ボタンを選び、3つの周波数を直接入力してオリジナルの和音を割り当てます。
      * ディレイ設定は通常の和音と共通です。
      */
-    //% blockId=guitarchord_v29_assign_custom block="$button に周波数 $f1 Hz・$f2 Hz・$f3 Hz を割り当てる"
+    //% blockId=guitarchord_v31_assign_custom block="$button に|周波数1 $f1 Hz|周波数2 $f2 Hz|周波数3 $f3 Hz|を割り当てる"
+//% inlineInputMode=external
     //% group="スイッチ割り当て" weight=99
     //% button.defl=ChordButton.Button1
     //% f1.defl=262 f1.min=31 f1.max=10000
