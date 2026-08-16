@@ -229,16 +229,28 @@ namespace guitarchord {
     }
 
     /**
+     * 周波数入力用の「数値 + Hz」シャドーブロックです。
+     */
+    //% blockId=guitarchord_v32_frequency_hz block="$hz Hz"
+    //% blockHidden=true
+    //% shim=TD_ID
+    //% hz.min=31 hz.max=10000
+    //% inlineInputMode=inline
+    export function __frequencyHz(hz: number): number {
+        return hz
+    }
+
+    /**
      * ボタンを選び、3つの周波数を直接入力してオリジナルの和音を割り当てます。
      * ディレイ設定は通常の和音と共通です。
      */
-    //% blockId=guitarchord_v31_assign_custom block="$button に|周波数1 $f1 Hz|周波数2 $f2 Hz|周波数3 $f3 Hz|を割り当てる"
-//% inlineInputMode=external
+    //% blockId=guitarchord_v32_assign_custom block="$button|周波数1 $f1|周波数2 $f2|周波数3 $f3|に割り当てる"
+    //% inlineInputMode=external
     //% group="スイッチ割り当て" weight=99
     //% button.defl=ChordButton.Button1
-    //% f1.defl=262 f1.min=31 f1.max=10000
-    //% f2.defl=330 f2.min=31 f2.max=10000
-    //% f3.defl=392 f3.min=31 f3.max=10000
+    //% f1.shadow="guitarchord_v32_frequency_hz" f1.defl=262
+    //% f2.shadow="guitarchord_v32_frequency_hz" f2.defl=330
+    //% f3.shadow="guitarchord_v32_frequency_hz" f3.defl=392
     export function assignFrequencies(button: ChordButton, f1: number, f2: number, f3: number): void {
         assignPinFrequencies(buttonToPin(button), f1, f2, f3)
     }
